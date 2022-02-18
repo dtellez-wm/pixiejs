@@ -40,6 +40,28 @@ function dibujar_circulo(value_x, value_y) {
     graphics.beginFill(0xDE3239, 1);
     graphics.drawCircle(value_x, value_y, 5);
     graphics.endFill();
+    graphics.interactive = true;
+    graphics.buttonMode = true;
+    const onDragStart = event => {
+        graphics.data = event.data;
+        graphics.dragging = true;
+    };
+    const onDragEnd = event => {
+        delete graphics.data;
+        graphics.dragging = false;
+    };
+    const onDragMove = event => {
+        if(graphics.dragging === true)
+        {
+            const newPosition = graphics.data.getLocalPosition(graphics.parent);
+            graphics.x = newPosition.x;
+            graphics.y = newPosition.y;
+        }
+    };
+    graphics.on('pointerdown', onDragStart);
+    graphics.on('pointerup', onDragEnd);
+    graphics.on('pointerupoutside', onDragEnd);
+    graphics.on('pointermove', onDragMove);
 }
 
 function dibujar_linea(value_x, value_y) {
